@@ -1,6 +1,6 @@
 const keys = require("./keys");
-const redis = require("redis");
 const express = require("express");
+const redis = require("redis");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -26,8 +26,6 @@ pgClient.on("connect", (client) => {
     .catch((err) => console.error(err));
 });
 
-
-const redis = require("redis");
 const redisClient = redis.createClient({
   host: keys.redisHost,
   port: keys.redisPort,
@@ -40,7 +38,7 @@ app.get("/", (req, res) => {
   res.send("hi");
 });
 
-app.get("/values", async (req, res) => {
+app.get("/values/all", async (req, res) => {
   const values = await pgClient.query("SELECT * FROM values");
   res.send(values.rows);
 });
