@@ -1,0 +1,19 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t neeraj33negi/fibcom-client-test -f ./client/Dockerfile.dev ./client
+script:
+  - docker run -e CI=true neeraj33negi/fibcom-client-test npm test -- --coverage
+after_success:
+  - docker build -t neeraj33negi/fibcom-client ./client
+  - docker build -t neeraj33negi/fibcom-server ./server
+  - docker build -t neeraj33negi/fibcom-worker ./worker
+  - docker build -t neeraj33negi/fibcom-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push neeraj33negi/fibcom-client
+  - docker push neeraj33negi/fibcom-server
+  - docker push neeraj33negi/fibcom-nginx
+  - docker push neeraj33negi/fibcom-worker
+
+
